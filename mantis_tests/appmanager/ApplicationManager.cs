@@ -26,6 +26,9 @@ namespace mantis_tests
             Ftp = new FtpHelper(this);
             James = new JamesHelper(this);
             Mail = new MailHelper(this);
+            Login = new LoginHelper(this);
+            Menu = new ManagmentMenuHelper(this);
+            Project = new ProjectHelper(this);
         }
 
          ~ApplicationManager()
@@ -52,13 +55,16 @@ namespace mantis_tests
         public FtpHelper Ftp { get; set; }
         public JamesHelper James { get; private set; }
         public MailHelper Mail { get; private set; }
+        public LoginHelper Login { get; private set; }
+        public ManagmentMenuHelper Menu { get; private set; }
+        public ProjectHelper Project { get; private set; }
 
         public static ApplicationManager GetInstance()
         {
             if (! app.IsValueCreated)
             {
                 ApplicationManager newInstance = new ApplicationManager();
-                newInstance.driver.Url = "http://localhost/mantisbt-1.2.17/login_page.php";
+                newInstance.driver.Url = "http://localhost/mantisbt-2.4.1/login_page.php";
                 app.Value = newInstance;
             }
             return app.Value;

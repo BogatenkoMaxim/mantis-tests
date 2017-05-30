@@ -59,7 +59,7 @@ namespace mantis_tests
             driver.FindElement(By.CssSelector("a.back-to-login-link.pull-left")).Click();
         }
 
-        private void OpenMainPage()
+        public void OpenMainPage()
         {
             manager.Driver.Url = "http://localhost/mantisbt-2.4.1/login_page.php";
         }
