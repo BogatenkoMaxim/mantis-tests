@@ -19,12 +19,17 @@ namespace mantis_tests
 
             app.Project.Cheking(account);
 
-            var oldCount = app.Project.CountOfProjects();
+            List<ProjectData> oldCount = app.Project.CountOfProjects();
 
             app.Project.Delete(0);
 
-            var newCount = app.Project.CountOfProjects();
-            Assert.AreEqual(oldCount - 1, newCount);
+            List<ProjectData> newCount = app.Project.CountOfProjects();
+            Assert.AreEqual(oldCount.Count - 1, newCount.Count);
+
+            oldCount.RemoveAt(0);
+            oldCount.Sort();
+            newCount.Sort();
+            Assert.AreEqual(oldCount, newCount);
         }
     }
 }

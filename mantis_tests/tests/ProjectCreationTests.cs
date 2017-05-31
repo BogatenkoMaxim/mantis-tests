@@ -17,21 +17,22 @@ namespace mantis_tests
                 Password = "root",
             };
 
-            ProjectData project = new ProjectData()
-            {
-                Name = "admin6",
-                Description = "What is love6",
-            };
+            ProjectData project = new ProjectData("admin7");
 
             app.Project.AutoProjMenu(account);
 
 
-            var oldCount = app.Project.CountOfProjects();
+            List<ProjectData> oldCount = app.Project.CountOfProjects();
 
             app.Project.Add(project);
 
-            var newCount = app.Project.CountOfProjects();
-            Assert.AreEqual(oldCount + 1, newCount);
+            List<ProjectData> newCount = app.Project.CountOfProjects();
+
+            Assert.AreEqual(oldCount.Count + 1, newCount.Count);
+            oldCount.Add(project);
+            oldCount.Sort();
+            newCount.Sort();
+            Assert.AreEqual(oldCount, newCount);
         }
     }
 }

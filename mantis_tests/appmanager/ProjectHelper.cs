@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace mantis_tests
 {
@@ -16,7 +17,10 @@ namespace mantis_tests
         {
             driver.FindElement(By.CssSelector("input.btn.btn-primary.btn-white.btn-round")).Click();
             FillNewProjectForm(project);
-            System.Threading.Thread.Sleep(3000);
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.XPath("//tbody/tr/td/a")).Count > 0);
+            //.Until(d => d.FindElements(By.CssSelector("div.col-md-12.col-xs-12")).Count > 0);
+            //System.Threading.Thread.Sleep(3000);
         }
 
         public void Delete(int index)
@@ -27,8 +31,10 @@ namespace mantis_tests
 
         private void DeleteProject()
         {
-            driver.FindElement(By.XPath("//input[@value='Удалить проект' and @type='submit']")).Click();
-            driver.FindElement(By.XPath("//input[@value='Удалить проект' and @type='submit']")).Click();
+            driver.FindElement(By.CssSelector("input.btn.btn-primary.btn-sm.btn-white.btn-round")).Click();
+            driver.FindElement(By.CssSelector("input.btn.btn-primary.btn-white.btn-round")).Click();
+            //driver.FindElement(By.XPath("//input[@value='Удалить проект' and @type='submit']")).Click();
+            //driver.FindElement(By.XPath("//input[@value='Удалить проект' and @type='submit']")).Click();
         }
 
         public void ChoiseProject(int index)
@@ -47,20 +53,29 @@ namespace mantis_tests
         public void FillNewProjectForm(ProjectData project)
         {
             driver.FindElement(By.Name("name")).SendKeys(project.Name);
-            driver.FindElement(By.Name("description")).SendKeys(project.Description);
+            //driver.FindElement(By.Name("description")).SendKeys(project.Description);
             driver.FindElement(By.CssSelector("input.btn.btn-primary.btn-white.btn-round")).Click();
         }
 
-        public int CountOfProjects()
+        public List<ProjectData> CountOfProjects()
         {
+            List<ProjectData> list = new List<ProjectData>();
             if (IsElementPresent(By.XPath("//div/table/tbody/tr/td/i")))
             {
-                return driver.FindElement(By.CssSelector("table.table.table-striped.table-bordered.table-condensed.table-hover"))
-                .FindElements(By.CssSelector("td.center")).Count;
+                ICollection<IWebElement> elements = driver.FindElement(By.CssSelector("table.table.table-striped.table-bordered.table-condensed.table-hover"))
+                    .FindElements(By.XPath(".//tbody/tr"));
+                foreach(IWebElement element in elements)
+                {
+                    
+                    list.Add(new ProjectData(element.FindElement(By.XPath(".//td/a")).Text));
+                }
+                return list;
+                //return driver.FindElement(By.CssSelector("table.table.table-striped.table-bordered.table-condensed.table-hover"))
+                //.FindElements(By.CssSelector("td.center")).Count;
             }
             else
             {
-                return 0;
+                return list;
             }
         }
 
@@ -69,12 +84,7 @@ namespace mantis_tests
             AutoProjMenu(account);
            if (!IsElementPresent(By.XPath("//div/table/tbody/tr/td/i")))
                 {
-                    ProjectData project = new ProjectData()
-                    {
-                        Name = "new1",
-                        Description = "rew1",
-                    };
-
+                ProjectData project = new ProjectData("new1");
                     Add(project);
                 }
         }
