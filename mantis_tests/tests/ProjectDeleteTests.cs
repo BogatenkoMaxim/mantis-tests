@@ -19,11 +19,12 @@ namespace mantis_tests
 
             app.Project.Cheking(account);
 
-            List<ProjectData> oldCount = app.Project.CountOfProjects();
+            List<ProjectData> oldCount = app.API.CountOfProject(account);
 
+            app.Project.AutoProjMenu(account);
             app.Project.Delete(0);
 
-            List<ProjectData> newCount = app.Project.CountOfProjects();
+            List<ProjectData> newCount = app.API.CountOfProject(account);
             Assert.AreEqual(oldCount.Count - 1, newCount.Count);
 
             oldCount.RemoveAt(0);

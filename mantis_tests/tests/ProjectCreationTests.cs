@@ -17,6 +17,7 @@ namespace mantis_tests
                 Password = "root",
             };
 
+            
             ProjectData project = new ProjectData("admin7");
 
             app.Project.AutoProjMenu(account);
@@ -27,6 +28,29 @@ namespace mantis_tests
             app.Project.Add(project);
 
             List<ProjectData> newCount = app.Project.CountOfProjects();
+
+            Assert.AreEqual(oldCount.Count + 1, newCount.Count);
+            oldCount.Add(project);
+            oldCount.Sort();
+            newCount.Sort();
+            Assert.AreEqual(oldCount, newCount);
+        }
+
+        [Test]
+        public void APIProjectCreation()
+        {
+            AccountData account = new AccountData()
+            {
+                Name = "administrator",
+                Password = "root",
+            };
+            ProjectData project = new ProjectData("admin10");
+
+            List<ProjectData> oldCount = app.API.CountOfProject(account);
+
+            app.API.AddProject(account, project);
+
+            List<ProjectData> newCount = app.API.CountOfProject(account);
 
             Assert.AreEqual(oldCount.Count + 1, newCount.Count);
             oldCount.Add(project);

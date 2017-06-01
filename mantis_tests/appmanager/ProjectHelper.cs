@@ -45,7 +45,7 @@ namespace mantis_tests
 
         public void AutoProjMenu(AccountData account)
         {
-            manager.Registration.OpenMainPage();
+            //manager.Registration.OpenMainPage();
             manager.Login.Autorization(account);
             manager.Menu.GoToProjectControl();
         }
@@ -81,12 +81,12 @@ namespace mantis_tests
 
         public void Cheking(AccountData account)
         {
-            AutoProjMenu(account);
-           if (!IsElementPresent(By.XPath("//div/table/tbody/tr/td/i")))
-                {
-                ProjectData project = new ProjectData("new1");
-                    Add(project);
-                }
+            List<ProjectData> list = manager.API.CountOfProject(account);
+            if(list.Count == 0)
+            {
+                ProjectData project = new ProjectData("NewProjectApi");
+                manager.API.AddProject(account, project);
+            }
         }
     }
 }

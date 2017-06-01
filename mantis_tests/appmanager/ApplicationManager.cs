@@ -21,7 +21,7 @@ namespace mantis_tests
         private ApplicationManager()
         {
             driver = new FirefoxDriver(new FirefoxBinary("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"), new FirefoxProfile());
-            baseURL = "http://localhost/";
+            baseURL = "http://localhost/mantisbt-2.4.1";
             Registration = new RegistrationHelper(this);
             Ftp = new FtpHelper(this);
             James = new JamesHelper(this);
@@ -29,6 +29,8 @@ namespace mantis_tests
             Login = new LoginHelper(this);
             Menu = new ManagmentMenuHelper(this);
             Project = new ProjectHelper(this);
+            Admin = new AdminHelper(this, baseURL);
+            API = new APIHelper(this);
         }
 
          ~ApplicationManager()
@@ -58,13 +60,15 @@ namespace mantis_tests
         public LoginHelper Login { get; private set; }
         public ManagmentMenuHelper Menu { get; private set; }
         public ProjectHelper Project { get; private set; }
+        public AdminHelper Admin { get; private set; }
+        public APIHelper API { get; set; }
 
         public static ApplicationManager GetInstance()
         {
             if (! app.IsValueCreated)
             {
                 ApplicationManager newInstance = new ApplicationManager();
-                newInstance.driver.Url = "http://localhost/mantisbt-2.4.1/login_page.php";
+                newInstance.driver.Url = newInstance.baseURL + "/login_page.php";
                 app.Value = newInstance;
             }
             return app.Value;
